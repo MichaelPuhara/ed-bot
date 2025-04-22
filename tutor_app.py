@@ -1,5 +1,5 @@
 import streamlit as st
-import requests
+import openai
 
 # Claude-style Socratic Tutor Prompt
 SYSTEM_PROMPT = """
@@ -9,25 +9,25 @@ clarify misconceptions, and encourage structured problem-solving.
 Always assume the student is capable of arriving at the answer with your support.
 """
 
-# Send message to Ollama server
-def query_ollama(chat_history):
-    url = "http://localhost:11434/api/chat"
-    payload = {
-        "model": "mistral",
-        "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + chat_history,
-        "stream": False
-    }
+# Set OpenAI API key
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
+# Send message to OpenAI
+def query_openai(chat_history):
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}] + chat_history
     try:
-        res = requests.post(url, json=payload)
-        res.raise_for_status()
-        return res.json().get("message", {}).get("content", "⚠️ No response from model.")
-    except requests.RequestException as e:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",  # Or use "gpt-3.5-turbo" for lower cost
+            messages=messages,
+            temperature=0.7
+        )
+        return response["choices"][0]["message"]["content"]
+    except Exception as e:
         return f"⚠️ Error: {e}"
 
 # Streamlit UI
 st.set_page_config(page_title="Claude for Education", page_icon="🧠")
-st.title("🧠 Personalised Tutor")
+st.title("🧠 Claude-style Socratic Tutor")
 st.markdown("_Ask a question and let your AI tutor guide your thinking._")
 
 # Session state for chat
@@ -48,13 +48,8 @@ if st.button("Ask Tutor"):
     if user_input.strip() == "":
         st.warning("Please enter a question.")
     else:
-        # Add user message to chat
         st.session_state.chat.append({"role": "user", "content": user_input})
-
-        # Get tutor response
         with st.spinner("Thinking..."):
-            response = query_ollama(st.session_state.chat)
+            response = query_openai(st.session_state.chat)
             st.session_state.chat.append({"role": "assistant", "content": response})
-
-        # Only rerun after the interaction is complete
         st.rerun()
