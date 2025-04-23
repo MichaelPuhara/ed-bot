@@ -26,9 +26,9 @@ def query_openai(chat_history):
         return f"⚠️ Error: {e}"
 
 # Streamlit UI
-st.set_page_config(page_title="Claude-style Tutor", page_icon="🧠")
-st.title("🧠 Claude-style Socratic Tutor")
-st.markdown("_Ask a question and let your AI tutor guide your thinking._")
+st.set_page_config(page_title="Personalised Tutor", page_icon="🧠")
+st.title("🧠 Personalised Tutor")
+st.markdown("_Ask a question and let your Personalised tutor guide your thinking._")
 
 if "chat" not in st.session_state:
     st.session_state.chat = []
