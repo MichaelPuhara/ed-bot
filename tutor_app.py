@@ -26,8 +26,8 @@ def query_openai(chat_history):
         return f"⚠️ Error: {e}"
 
 # Streamlit UI
-st.set_page_config(page_title="Personalised Tutor", page_icon="🧠")
-st.title("🧠 Personalised Tutor")
+st.set_page_config(page_title="Personalised Tutor", page_icon="📚")
+st.title("📚 Personalised Tutor")
 st.markdown("_Ask a question and let your Personalised tutor guide your thinking._")
 
 if "chat" not in st.session_state:
@@ -37,7 +37,7 @@ for msg in st.session_state.chat:
     if msg["role"] == "user":
         st.markdown(f"**🧑‍🎓 You:** {msg['content']}")
     elif msg["role"] == "assistant":
-        st.markdown(f"**🧠 Tutor:** {msg['content']}")
+        st.markdown(f"**📚 Tutor:** {msg['content']}")
 
 user_input = st.text_area("Enter your question or idea", height=100)
 
