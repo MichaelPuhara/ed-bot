@@ -4,7 +4,7 @@ import openai
 # Set up the client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Claude-style Socratic Tutor Prompt
+# Personalised Tutor Prompt
 SYSTEM_PROMPT = """
 You are a Personalised tutor designed to help students think critically and learn deeply. 
 Instead of providing direct answers, you guide them through reflective questions, 
